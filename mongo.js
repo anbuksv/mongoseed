@@ -10,6 +10,9 @@ var init = () => {
 	var intentResponses = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./mongo/intentResponses.json'), 'utf8'))
 
 	var backup = fs.renameSync(path.resolve(__dirname,'./mongo/intentResponses.json'),path.resolve(__dirname,'./mongo/intentResponses_Backup.json'))
+	
+	// var backupOld = fs.renameSync(path.resolve(__dirname,'./mongo/intentResponsesBackup.json'),path.resolve(__dirname,`./mongo/intentResponsesBackup_${new Date().getTime()}.json`))
+	// fs.createReadStream(path.resolve(__dirname,'./mongo/intentResponsesBackup.json')).pipe(fs.createWriteStream(path.resolve(__dirname,`./mongo/intentResponsesBackup_${new Date().getTime()}.json`)));
 
 	let intentResponsesOld = intentResponses;
 	// console.log(intentResponses)
