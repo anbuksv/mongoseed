@@ -1,0 +1,20 @@
+{
+  "name": "mongo-backup-restore",
+  "version": "1.0.0",
+  "description": "Using this you can achieve mongodb collection backup and restored and automatic backup from server.ssl and user authentication also available.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongodb",
+    "backup",
+    "restore"
+  ],
+  "author": "Anbarasan",
+  "license": "MIT",
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "mongodb": "^2.2.29"
+  }
+}
