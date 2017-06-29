@@ -1,19 +1,32 @@
 {
-  "name": "mongo-backup-restore",
-  "version": "1.0.0",
-  "description": "Using this you can achieve mongodb collection backup and restored and automatic backup from server.ssl and user authentication also available.",
-  "main": "app.js",
+  "name": "mongoseed",
+  "version": "0.0.1",
+  "preferGlobal":true,
+  "bin":{"mongoseed":"seed.js"},
+  "description": "mongoseed is a simple command line interface application to seed data from local db to server or server to local.",
+  "main": "seed.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anbuksv/mongoseed.git"
+  },
   "keywords": [
     "mongodb",
+    "node",
+    "mongo-seed",
+    "mongoseed",
+    "mongo seed"
+    "seed",
+    "seeds",
     "backup",
     "restore"
   ],
-  "author": "Anbarasan",
+  "author": "Anbarasan <anbuksv@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "minimist": "^1.2.0",
     "mongodb": "^2.2.29"
   }
