@@ -17,6 +17,10 @@ let seedsFromPort = (arg.fromPort || arg.sourcePort || arg.sfp || arg.sp || 2701
 let seedsToHost = (arg.toHost || arg.dHost || arg.dh || 'localhost')
 let seedsToPort = (arg.toPort || arg.sourcePort || arg.sp || 6666)
 let db = (arg.db || false)
+let collection = (arg.collection || false)
+let query = (arg.query || false)
+let skip = (arg.skip || false)
+let limit = (arg.limit || false)
 
 const seedsFromUrl = 'mongodb://' + seedsFromHost + ':' + seedsFromPort
 const seedsToUrl = 'mongodb://' + seedsToHost + ':' + seedsToPort
@@ -31,10 +35,19 @@ seedsFrom.connectAsync(seedsFromUrl).then((_db)=>{
 		seedsToDB = _db
 		seedsToDbAdmin = _db.admin()
 		if(db){
-			seedDb(db).then(() => {
-				console.log(`data seed completed`)
-				closeDbs()
-			})
+			if(collection){
+				let seedsFromDb = seedsFromDB.db(db)
+				let seedsToDb = seedsToDB.db(db)
+				seedCollection(seedsFromDb,seedsToDb,collection,db).then(()=>{
+					console.log(`${db}.${collection} data seed completed`)
+					closeDbs()
+				})
+			}else{
+				seedDb(db).then(() => {
+					console.log(`data seed completed`)
+					closeDbs()
+				})
+			}
 		}else{
 			initSeedsFrom()			
 		}
