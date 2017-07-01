@@ -1,6 +1,5 @@
 # mongoseed
-
-![](https://raw.githubusercontent.com/anbuksv/mongoseed/master/version.svg)
+	version : 0.0.2
 
 > mongoseed is a simple command line interface tool to seed data from your local mongodb into server easly and you can also seed data from server to your local mongodb.
 
