@@ -19,6 +19,7 @@ let seedsToPort = (arg.toPort || arg.sourcePort || arg.sp || 6666)
 let db = (arg.db || false)
 let collection = (arg.collection || false)
 let query = (arg.query || false)
+let drop = (arg.drop || false)
 let skip = (arg.skip || false)
 let limit = (arg.limit || false)
 
@@ -38,10 +39,38 @@ seedsFrom.connectAsync(seedsFromUrl).then((_db)=>{
 			if(collection){
 				let seedsFromDb = seedsFromDB.db(db)
 				let seedsToDb = seedsToDB.db(db)
-				seedCollection(seedsFromDb,seedsToDb,collection,db).then(()=>{
-					console.log(`${db}.${collection} data seed completed`)
-					closeDbs()
-				})
+				if(drop){
+					seedsToDb.dropCollectionAsync(collection).then(result=>{
+						if(query){
+							query = parseQuery(query)
+							seedCollection(seedsFromDb,seedsToDb,collection,db,query).then(()=>{
+								console.log(`${db}.${collection} data seed completed`)
+								closeDbs()
+							})
+						}else{
+							seedCollection(seedsFromDb,seedsToDb,collection,db).then(()=>{
+								console.log(`${db}.${collection} data seed completed`)
+								closeDbs()
+							})
+						}
+					}).catch(e=>{
+						console.log(e)
+					})
+				}else{
+					if(query){
+						query = parseQuery(query)
+						seedCollection(seedsFromDb,seedsToDb,collection,db,query).then(()=>{
+							console.log(`${db}.${collection} data seed completed`)
+							closeDbs()
+						})
+					}else{
+						seedCollection(seedsFromDb,seedsToDb,collection,db).then(()=>{
+							console.log(`${db}.${collection} data seed completed`)
+							closeDbs()
+						})
+					}
+				}
+
 			}else{
 				seedDb(db).then(() => {
 					console.log(`data seed completed`)
@@ -107,12 +136,12 @@ var seedDb = (dbName) => {
 	})
 }
 
-var seedCollection = (fromDb,toDb,collectionName,dbName) => {
+var seedCollection = (fromDb,toDb,collectionName,dbName,query = {}) => {
 	// console.log(dbName,collectionName)
 	// let find all documents from collection using db.collection(collectionName).find({"query"})
 	return new Promise((resolve,rejected) => {
 		if(collectionName != "system.version" && collectionName != "startup_log"){
-			fromDb.collection(collectionName).find({}).toArrayAsync().then(docs => {
+			fromDb.collection(collectionName).find(query).toArrayAsync().then(docs => {
 				toDb.collection(collectionName).insertMany(docs).then(result => {
 					console.log(`seed done for ${dbName}.${collectionName}`)
 					resolve()
@@ -128,6 +157,22 @@ var seedCollection = (fromDb,toDb,collectionName,dbName) => {
 		}
 	})
 }
+
+
+var parseQuery = (query) => {
+	// query = query.replace(/{/g,"")
+	// query = query.replace(/}/,"")
+	query = query.slice(1, -1)
+	query = query.split(',')
+	let jsonQuery = {}
+	query.forEach((pro) => {
+		let key = pro.split(':')[0]
+		let value = pro.split(':')[1]
+		jsonQuery[key] = eval(value)
+	})
+	return jsonQuery
+}
+
 
 var closeDbs = () => {
 	seedsFromDB.close()
