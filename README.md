@@ -57,17 +57,17 @@
   - Use drop option to dorp existing collection and seed data to destination host(**--toHost**)
 
 **--jsonArray**
-  - Specifie json file path to seed data from json filr
-   Options
-    > --host  default: localhost
+  - Specifie json file path to seed data from jsonArray
+ - Options
+    > --host  default: localhost 
 
     > --port  default: 27017
-
+    
     > --db  *Required
     
     > --collection *Required 
 
-    Example 
+- Example 
     > Run `mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
 
 ## Upcoming Feature
