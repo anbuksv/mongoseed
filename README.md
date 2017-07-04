@@ -7,17 +7,6 @@
 - You must have read and write access from server
 - If you don't have access read this [blog](https://www.digitalocean.com/community/tutorials/how-to-securely-configure-a-production-mongodb-server) will help to get access to mongodb from server
 
-## Features
-> From 0.0.4
-- Seed data from json array file
-- Run `mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
-> From 0.0.3
-- Seed single collection based on query
-- Run `$ mongoseed --db dbName --collection collectionName --query "{_id:ObjectId('59072e67413f91965809ce10')}"`
-> From 0.0.2
-- Seed single collection also supported
-- Run `$ mongoseed --db dbName --collection collectionName`
-
 ## Usage
 
 - Run `$ npm install -g mongoseed`
@@ -70,6 +59,17 @@
 - Example 
     > Run `mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
 
+
+## Features
+> From 0.0.4
+- Seed data from json array file
+- Run `mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
+> From 0.0.3
+- Seed single collection based on query
+- Run `$ mongoseed --db dbName --collection collectionName --query "{_id:ObjectId('59072e67413f91965809ce10')}"`
+> From 0.0.2
+- Seed single collection also supported
+- Run `$ mongoseed --db dbName --collection collectionName`
 ## Upcoming Feature
   - **seed data based on query** like {"age": {$gt:25}}
   
