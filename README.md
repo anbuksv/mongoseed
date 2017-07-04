@@ -54,7 +54,7 @@
 ## Upcoming Feature
   - **seed data based on query** like {"age": {$gt:25}}
   
-# LICENCE
-[MIT](https://github.com/anbuksv/mongoseed/blob/master/LICENCE)
+# LICENSE
+[MIT](https://github.com/anbuksv/mongoseed/blob/master/LICENSE)
 
 Enjoy!
