@@ -60,8 +60,11 @@
   - Specifie json file path to seed data from json filr
    Options
     > --host  default: localhost
+
     > --port  default: 27017
+
     > --db  *Required
+    
     > --collection *Required 
 
     Example 
