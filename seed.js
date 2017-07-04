@@ -12,82 +12,67 @@ var seedsToDB = null
 var seedsFromDbAdmin = null
 var seedsToDbAdmin = null
 
-let seedsFromHost = (arg.fromHost || arg.sourceHost || arg.sfh || arg.sh || 'localhost')
-let seedsFromPort = (arg.fromPort || arg.sourcePort || arg.sfp || arg.sp || 27017)
-let seedsToHost = (arg.toHost || arg.dHost || arg.dh || 'localhost')
-let seedsToPort = (arg.toPort || arg.sourcePort || arg.sp || 6666)
-let db = (arg.db || false)
-let collection = (arg.collection || false)
-let query = (arg.query || false)
-let drop = (arg.drop || false)
-let skip = (arg.skip || false)
-let limit = (arg.limit || false)
 
-const seedsFromUrl = 'mongodb://' + seedsFromHost + ':' + seedsFromPort
-const seedsToUrl = 'mongodb://' + seedsToHost + ':' + seedsToPort
-console.log("Seed from : ",seedsFromUrl)
-console.log("Seed to : ",seedsToUrl)
-
-
-seedsFrom.connectAsync(seedsFromUrl).then((_db)=>{
-	seedsFromDB = _db
-	seedsFromDbAdmin = _db.admin()
-	seedsTo.connectAsync(seedsToUrl).then((_db) => {
-		seedsToDB = _db
-		seedsToDbAdmin = _db.admin()
-		if(db){
-			if(collection){
-				let seedsFromDb = seedsFromDB.db(db)
-				let seedsToDb = seedsToDB.db(db)
-				if(drop){
-					seedsToDb.dropCollectionAsync(collection).then(result=>{
-						if(query){
-							query = parseQuery(query)
-							seedCollection(seedsFromDb,seedsToDb,collection,db,query).then(()=>{
-								console.log(`${db}.${collection} data seed completed`)
+var seed = (data) => {
+	seedsFrom.connectAsync(data.seedsFromUrl).then((_db)=>{
+		seedsFromDB = _db
+		seedsFromDbAdmin = _db.admin()
+		seedsTo.connectAsync(data.seedsToUrl).then((_db) => {
+			seedsToDB = _db
+			seedsToDbAdmin = _db.admin()
+			if(data.db){
+				if(data.collection){
+					let seedsFromDb = seedsFromDB.db(data.db)
+					let seedsToDb = seedsToDB.db(data.db)
+					if(data.drop){
+						seedsToDb.dropCollectionAsync(data.collection).then(result=>{
+							if(data.query){
+								data.query = parseQuery(data.query)
+								seedCollection(seedsFromDb,seedsToDb,data.collection,data.db,data.query).then(()=>{
+									console.log(`${data.db}.${data.collection} data seed completed`)
+									closeDbs()
+								})
+							}else{
+								seedCollection(seedsFromDb,seedsToDb,data.collection,data.db).then(()=>{
+									console.log(`${data.db}.${data.collection} data seed completed`)
+									closeDbs()
+								})
+							}
+						}).catch(e=>{
+							console.log(e)
+						})
+					}else{
+						if(data.query){
+							data.query = parseQuery(data.query)
+							seedCollection(seedsFromDb,seedsToDb,data.collection,data.db,data.query).then(()=>{
+								console.log(`${data.db}.${data.collection} data seed completed`)
 								closeDbs()
 							})
 						}else{
-							seedCollection(seedsFromDb,seedsToDb,collection,db).then(()=>{
-								console.log(`${db}.${collection} data seed completed`)
+							seedCollection(seedsFromDb,seedsToDb,data.collection,data.db).then(()=>{
+								console.log(`${data.db}.${data.collection} data seed completed`)
 								closeDbs()
 							})
 						}
-					}).catch(e=>{
-						console.log(e)
-					})
-				}else{
-					if(query){
-						query = parseQuery(query)
-						seedCollection(seedsFromDb,seedsToDb,collection,db,query).then(()=>{
-							console.log(`${db}.${collection} data seed completed`)
-							closeDbs()
-						})
-					}else{
-						seedCollection(seedsFromDb,seedsToDb,collection,db).then(()=>{
-							console.log(`${db}.${collection} data seed completed`)
-							closeDbs()
-						})
 					}
+
+				}else{
+					seedDb(data.db).then(() => {
+						console.log(`data seed completed`)
+						closeDbs()
+					})
 				}
-
 			}else{
-				seedDb(db).then(() => {
-					console.log(`data seed completed`)
-					closeDbs()
-				})
+				initSeedsFrom()			
 			}
-		}else{
-			initSeedsFrom()			
-		}
-	}).catch(err => {
-		console.log(err)
+		}).catch(err => {
+			console.log(err)
+		})
 	})
-})
-.catch((e)=>{
-	console.log(e)
-})
-
+	.catch((e)=>{
+		console.log(e)
+	})
+}
 
 var initSeedsFrom = () => {
 	seedsFromDbAdmin.listDatabasesAsync().then(dbs => {
@@ -147,7 +132,7 @@ var seedCollection = (fromDb,toDb,collectionName,dbName,query = {}) => {
 					resolve()
 				}).catch(err => {
 					resolve()
-					console.log(`seed faild for collection ${dbName}.${collectionName} due to ${err}`)
+					console.log(`seed failed for collection ${dbName}.${collectionName} due to ${err}`)
 				})
 				// console.log(collectionName,docs)
 			}).catch(err => {
@@ -178,3 +163,33 @@ var closeDbs = () => {
 	seedsFromDB.close()
 	seedsToDB.close()
 }
+
+var seedJSON = (arg,data) => {
+	seedsFrom.connectAsync(arg.seedsFromUrl).then((_db)=>{
+		if(arg.drop){
+			_db.dropCollectionAsync(arg.collection).then(result=>{
+				_db.collection(arg.collection).insertMany(data).then(result => {
+					console.log(`${arg.collection} data seed completed`)
+					_db.close()
+				}).catch(err => {
+					console.log(err)
+				})
+			})
+			.catch((err) => {
+				_db.close()
+				console.log(err)
+			})
+		}else{
+			_db.collection(arg.collection).insertMany(data).then(result => {
+				console.log(`${arg.collection} data seed completed`)
+				_db.close()
+			}).catch(err => {
+				console.log(err)
+				_db.close()
+			})
+		}
+	}).catch(err => {
+		console.log(err)
+	})
+}
+module.exports = {seed,seedJSON}

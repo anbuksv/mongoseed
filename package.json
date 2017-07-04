@@ -1,9 +1,9 @@
 {
   "name": "mongoseed",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "preferGlobal": true,
   "bin": {
-    "mongoseed": "seed.js"
+    "mongoseed": "app.js"
   },
   "description": "mongoseed is a simple command line interface application to seed data from local db to server or server to local.",
   "main": "seed.js",
@@ -30,6 +30,7 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "minimist": "^1.2.0",
-    "mongodb": "^2.2.29"
+    "mongodb": "^2.2.29",
+    "mongodb-extended-json": "^1.9.0"
   }
 }
