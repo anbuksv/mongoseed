@@ -27,7 +27,7 @@ var seed = (data) => {
 					if(data.drop){
 						seedsToDb.dropCollectionAsync(data.collection).then(result=>{
 							if(data.query){
-								data.query = parseQuery(data.query)
+								data.query = data.config ? data.query : parseQuery(data.query)
 								seedCollection(seedsFromDb,seedsToDb,data.collection,data.db,data.query).then(()=>{
 									console.log(`${data.db}.${data.collection} data seed completed`)
 									closeDbs()
@@ -43,7 +43,7 @@ var seed = (data) => {
 						})
 					}else{
 						if(data.query){
-							data.query = parseQuery(data.query)
+							data.query = data.config ? data.query : parseQuery(data.query)
 							seedCollection(seedsFromDb,seedsToDb,data.collection,data.db,data.query).then(()=>{
 								console.log(`${data.db}.${data.collection} data seed completed`)
 								closeDbs()

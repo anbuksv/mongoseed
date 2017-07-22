@@ -1,5 +1,6 @@
 # mongoseed
-  version : 0.0.4
+  
+  version : 0.0.5
 
 > mongoseed is a simple command line interface tool to seed data from your local mongodb into server easily and you can also seed data from server to your local mongodb.
 
@@ -40,7 +41,7 @@
 
 **--query**
   - Seed collection data based on query
-  - **Note :** $gt,$ls,$or are not supported
+  - **Note :** $gt,$ls,$or are supported in config file but not supported in command
 
 **--drop**
   - Use drop option to dorp existing collection and seed data to destination host(**--toHost**)
@@ -57,13 +58,21 @@
     > --collection *Required 
 
 - Example 
-    > Run `mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
+    > Run `$ mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
 
+**--config
+  - write set of command instruction and specifie the path of config file
+  - example config file [link here](https://github.com/anbuksv/mongoseed/blob/master/config.json).
+- Example
+    > Run `$ mongoseed --config ./config.json` 
 
 ## Features
+> From 0.0.5
+- config file supported
+- Run  `$ mongoseed --config ./config.json`
 > From 0.0.4
 - Seed data from json array file
-- Run `mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
+- Run `$ mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
 > From 0.0.3
 - Seed single collection based on query
 - Run `$ mongoseed --db dbName --collection collectionName --query "{_id:ObjectId('59072e67413f91965809ce10')}"`
