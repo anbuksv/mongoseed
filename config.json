@@ -1,0 +1,9 @@
+{
+	"fromHost":"localhost",
+	"fromPort":27017,
+	"toHost":"localhost",
+	"toPort":6666,
+	"db":"anbu",
+	"collection":"users",
+	"query":{"age":{"$lt":35}}
+}
