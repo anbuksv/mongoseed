@@ -60,7 +60,7 @@
 - Example 
     > Run `$ mongoseed --db dbName --collection collectionName --jsonArray ./fileName.json`
 
-**--config
+**--config**
   - write set of command instruction and specifie the path of config file
   - example config file [link here](https://github.com/anbuksv/mongoseed/blob/master/config.json).
 - Example
