@@ -79,8 +79,6 @@
 > From 0.0.2
 - Seed single collection also supported
 - Run `$ mongoseed --db dbName --collection collectionName`
-## Upcoming Feature
-  - **seed data based on query** like {"age": {$gt:25}}
   
 # LICENSE
 [MIT](https://github.com/anbuksv/mongoseed/blob/master/LICENSE)
